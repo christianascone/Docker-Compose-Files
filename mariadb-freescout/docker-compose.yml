@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mariadb:10.6.4-focal
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=freescout
+      - MYSQL_DATABASE=freescout
+      - MYSQL_USER=freescout
+      - MYSQL_PASSWORD=freescout
+    expose:
+      - 3306
+      - 33060
+  freescout:
+    image: tiredofit/freescout:latest
+    ports:
+      - 80:80
+    restart: always
+    environment:
+      - DB_HOST=db
+      - DB_USER=freescout
+      - DB_PASS=freescout
+      - DB_NAME=freescout
+      - SITE_URL=http://freescout.example.com
+      - ADMIN_EMAIL=admin@localhost.it
+      - ADMIN_PASS=admin
+      - ENABLE_SSL_PROXY=FALSE
+volumes:
+  db_data:
